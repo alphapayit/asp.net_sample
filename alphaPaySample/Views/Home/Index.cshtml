@@ -1,0 +1,72 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>AlphaPay Shopping Mall</title>
+    <link href="style/style.css" rel="stylesheet" type="text/css">
+    <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.3.1.min.js"></script>
+</head>
+<body>
+    <h1 style="text-align:center">View Cart</h1>
+    <div class="cart-view-table-back">
+        <form method="post" action="cart_update.php">
+            <table width="100%" cellpadding="6" cellspacing="0">
+                <thead><tr><th>Quantity</th><th>Name</th><th>Price</th><th>Total</th></tr></thead>
+                <tbody>
+                    <tr class="'.$bg_color.'">
+                       
+                        <td></td>
+                        
+                        <td>$product_name</td>
+                        
+                        <td>$currency.$product_price</td>
+                        
+                        <td>$currency.$subtotal</td>
+                        
+                    </tr>
+                   
+
+               
+                    <tr><td colspan="5"><span style="float:right;text-align: right;">Amount Payable : </span></td></tr>
+                    
+                    <tr>
+                        <td colspan="5">
+                            <a href="javascript:void(0);" class="button wechat" style="margin-left:20px;" onclick="pay('wechat',0.01)">Wechat Pay</a>
+                            <a href="javascript:void(0);" class="button alipay" onclick="pay('alipay', 0.01)">Alipay</a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <input type="hidden" name="return_url" value="<?php
+                   $current_url=urlencode($url ="http://" .$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']);
+                   echo $current_url; ?>" />
+        </form>
+    </div>
+
+</body>
+<script type="text/javascript">
+
+
+    function pay(channel,price){
+        var data = { channel: channel, price: price };
+
+        $.ajax({
+            type: "GET",
+            url:"checkout.php",
+
+            success:function(res){
+
+                if(res['code'] == 0 && res['url']){
+                    window.location.href= res['url'];
+                }
+            }
+
+        })
+    }
+</script>
+</html>
